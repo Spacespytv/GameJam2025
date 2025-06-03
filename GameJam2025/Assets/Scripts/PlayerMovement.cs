@@ -7,6 +7,12 @@ public class PlayerMovement : MonoBehaviour
     public float moveSpeed = 8f;
     public float jumpForce = 16f;
 
+    [Header("Acceleration & Deceleration")]
+    public float accelerationTime = 0.05f;
+    public float decelerationTime = 0.1f;
+
+    private float currentVelocityX; 
+
     [Header("Coyote Time")]
     public float coyoteTime = 0.1f;
     private float coyoteTimeCounter;
@@ -103,7 +109,12 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        rb.velocity = new Vector2(moveInput.x * moveSpeed, rb.velocity.y);
+        float targetSpeed = moveInput.x * moveSpeed;
+        float smoothTime = Mathf.Abs(targetSpeed) > 0.01f ? accelerationTime : decelerationTime;
+
+        float newX = Mathf.SmoothDamp(rb.velocity.x, targetSpeed, ref currentVelocityX, smoothTime);
+        rb.velocity = new Vector2(newX, rb.velocity.y);
+
     }
 
     private void OnDrawGizmosSelected()
