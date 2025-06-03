@@ -6,6 +6,8 @@ public class PlayerMovement : MonoBehaviour
     [Header("Movement Settings")]
     public float moveSpeed = 8f;
     public float jumpForce = 16f;
+    private int facingDirection = 1;  
+    public int FacingDirection => facingDirection;  
 
     [Header("Acceleration & Deceleration")]
     public float accelerationTime = 0.05f;
@@ -114,6 +116,12 @@ public class PlayerMovement : MonoBehaviour
 
         float newX = Mathf.SmoothDamp(rb.velocity.x, targetSpeed, ref currentVelocityX, smoothTime);
         rb.velocity = new Vector2(newX, rb.velocity.y);
+
+        if (moveInput.x > 0.01f)
+            facingDirection = 1;
+        else if (moveInput.x < -0.01f)
+            facingDirection = -1;
+
 
     }
 
